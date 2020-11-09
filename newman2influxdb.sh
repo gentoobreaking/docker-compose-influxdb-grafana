@@ -15,7 +15,7 @@ run "/etc/newman/${collection_name}" -e "/etc/newman/environments/${env_name}" \
 --reporter-influxdb-name newman_reports \
 --reporter-influxdb-measurement "${JOB_NAME}" \
 --reporter-influxdb-username devops \
---reporter-influxdb-password devops \
+--reporter-influxdb-password devops123 \
 --reporter-influxdb-mode http \
 --delay-request 500 --timeout 900000 --timeout-request 5000 --timeout-script 5000 \
 --reporter-cli-no-failures --reporter-cli-no-assertions --reporter-cli-no-console \
