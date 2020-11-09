@@ -1,0 +1,4 @@
+mkdir chronograf grafana influxdb
+chmod -R 777 chronograf grafana influxdb
+
+
