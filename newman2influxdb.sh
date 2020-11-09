@@ -7,7 +7,7 @@ export report_name='rb88_transaction_shslrbp4.funpo.com_1.0.0'
 export iterations_num='2'
 export html_type='full' # original , aggregated , full
 
-docker run -v /opt/newman-src:/etc/newman --network docker-compose-influxdb-grafana_monitor \
+docker run -v /opt/newman-src:/etc/newman --network monitor \
 --name "${JOB_NAME}" --rm postman_checks:v0.3 \
 run "/etc/newman/${collection_name}" -e "/etc/newman/environments/${env_name}" \
 -r influxdb \
