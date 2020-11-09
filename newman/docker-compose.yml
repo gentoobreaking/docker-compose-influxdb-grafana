@@ -1,0 +1,60 @@
+version: '2'
+services:
+  influxdb:
+    container_name: influxdb
+    hostname: influxdb
+    image: influxdb:latest
+    ports:
+      - '8086:8086'
+    volumes:
+      - ./influxdb:/var/lib/influxdb
+    environment:
+      - INFLUXDB_DB=db0
+      - INFLUXDB_ADMIN_ENABLED=true
+      - INFLUXDB_ADMIN_USER=${INFLUXDB_ADMIN_USERNAME}
+      - INFLUXDB_ADMIN_PASSWORD=${INFLUXDB_ADMIN_PASSWORD}
+      - INFLUXDB_USER=${INFLUXDB_USERNAME}
+      - INFLUXDB_USER_PASSWORD=${INFLUXDB_PASSWORD}
+    restart: always
+    networks:
+      - monitor
+  chronograf:
+    container_name: chronograf
+    hostname: chronograf
+    image: chronograf:latest
+    ports:
+      - '8888:8888'
+      #- '127.0.0.1:8888:8888'
+    volumes:
+      - ./chronograf:/var/lib/chronograf
+    depends_on:
+      - influxdb
+    environment:
+      - INFLUXDB_URL=http://influxdb:8086
+      - INFLUXDB_USERNAME=${INFLUXDB_ADMIN_USERNAME}
+      - INFLUXDB_PASSWORD=${INFLUXDB_ADMIN_PASSWORD}
+    restart: always
+    networks:
+      - monitor
+  grafana:
+    container_name: grafana
+    hostname: grafana
+    image: grafana/grafana:latest
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./grafana:/var/lib/grafana
+      - ./grafana-provisioning/:/etc/grafana/provisioning
+      - GF_INSTALL_PLUGINS=grafana-clock-panel
+      - grafana-simple-json-datasource
+    depends_on:
+      - influxdb
+    environment:
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USERNAME}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD}
+    restart: always
+    networks:
+      - monitor
+
+networks:
+  monitor:
